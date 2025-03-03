@@ -1,14 +1,17 @@
+import os
+os.environ["HF_HUB_ENABLE_HF_TRANSFER"]='1'
+from huggingface_hub import snapshot_download
 from diffusers import DiffusionPipeline
 import torch
 from io import BytesIO
 import base64
-from huggingface_hub import snapshot_download
-import os
 
 class InferlessPythonModel:
     def initialize(self):
+        model_id = "playgroundai/playground-v2.5-1024px-aesthetic"
+        snapshot_download(repo_id=model_id,allow_patterns=["*.safetensors"])
         self.pipe = DiffusionPipeline.from_pretrained(
-            "playgroundai/playground-v2.5-1024px-aesthetic",
+            model_id,
             use_safetensors=True,
             torch_dtype=torch.float16,
             variant="fp16"
